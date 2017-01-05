@@ -12,7 +12,7 @@
     "compile:client": "tsc --project tsconfig.client.json && npm run create:public && browserify src/ts/index.js -o public/bundle.js",
     "compile:sass": "node-sass src/scss/index.scss -o public",
     "compile:server": "tsc --project tsconfig.server.json",
-    "compile:static": "for file in src/static/*; do echo \"$file\"; echo \"public/${file/src\\/static\\/}\"; cp \"$file\" \"public/${file/src\\/static\\/}\";done",
+    "compile:static": "for file in src/static/*; do echo \"$file\"; echo \"public/${file#src\\/static\\/}\"; cp \"$file\" \"public/${file/src\\/static\\/}\";done",
     "create:public": "if [ ! -d \"public\" ]; then mkdir \"public\"; fi",
     "dev": "npm run compile && concurrently \"node server/app.js\" \"sleep 1 && npm run open\"",
     "open": "opn http://localhost:${PORT:-3000}/",
