@@ -11,7 +11,7 @@ var messageTemplate = (function(){
 })();
 
 var client = new Client({
-  socketEndpoint: 'ws://localhost:5555/',
+  socketEndpoint: '/',
   waitUntilToken: true
 });
 
