@@ -11,7 +11,6 @@ var messageTemplate = (function(){
 })();
 
 var client = new Client({
-  socketEndpoint: '/',
   waitUntilToken: true
 });
 
