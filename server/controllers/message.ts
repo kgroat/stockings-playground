@@ -57,6 +57,7 @@ messageRouter.post('/', (req: Request, res: Response) => {
   if(messages.length > 50){
     messages.splice(0, 1);
   }
+  
   res.broadcast(MESSAGE_MESSAGE_ID, messages);
   res.broadcast(NEW_MESSAGE_MESSAGE_ID, message);
   res.subscribe(`${EDIT_MESSAGE_PREFIX}${message.id}`);
