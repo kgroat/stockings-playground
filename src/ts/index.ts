@@ -25,7 +25,7 @@ interface Message {
 }
 
 var test = client.request<Message[]>({
-  url: 'http://localhost:3000/api/message/',
+  url: '/api/message/',
   method: 'GET'
 }).map(msgs => {
   msgs.forEach(msg => {
@@ -58,7 +58,7 @@ messageForm.submit(ev => {
     return;
   }
   client.request<Message[]>({
-    url: 'http://localhost:3000/api/message/',
+    url: '/api/message/',
     method: 'POST',
     body: { body: body }
   }).subscribe();
