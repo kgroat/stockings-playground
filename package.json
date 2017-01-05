@@ -32,7 +32,7 @@
     "jquery": "^3.1.1",
     "node-sass": "^4.1.1",
     "stockings": "^0.1.5",
-    "stockings-client": "^0.1.8",
+    "stockings-client": "^0.1.9",
     "typescript": "^2.1.4"
   },
   "devDependencies": {
