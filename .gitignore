@@ -3,3 +3,4 @@ public
 node_modules
 *.js
 *.d.ts
+*.js.map
