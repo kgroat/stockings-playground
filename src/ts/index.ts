@@ -1,11 +1,11 @@
 
-import { Client, Request } from 'stockings-client';
+import { Client } from 'stockings-client';
 import * as $ from 'jquery';
 
 var messageTemplate = (function(){
   var tmpl = $('#messageTemplate')[0].innerHTML;
   return function messageTemplate(message: Message): string {
-    return tmpl.replace(/\{\{time\}\}/g, message.time.toLocaleTimeString())
+    return tmpl.replace(/\{\{time\}\}/g, message.time.toLocaleString())
                .replace(/\{\{body\}\}/g, message.body);
   };
 })();
@@ -24,20 +24,16 @@ interface Message {
   time: Date;
 }
 
-var test = client.request<Message[]>({
+client.request<Message[]>({
   url: '/api/message/',
   method: 'GET'
-}).map(msgs => {
-  msgs.forEach(msg => {
+}).map(messages => {
+  messages.forEach(msg => {
     msg.time = new Date(msg.time)
     msg.body = msg.body.replace(/\n/g, '<br/>');
   });
-  return msgs;
-});
-
-console.log('got here');
-
-test.subscribe(messages => {
+  return messages;
+}).subscribe(messages => {
   var allMessagesHtml = messages.reduce((html, message) => {
     return html + messageTemplate(message);
   }, '');
