@@ -4,12 +4,45 @@ body {
   font-size: 15px;
 }
 
+h1#header {
+  height: 5vh;
+  font-size: 4vh;
+  margin: 0;
+  white-space: nowrap;
+}
+
 p {
   margin: 0;
 }
 
+$messageFormHeight: 150px;
+
 #messages {
+  height: 90vh;
   border-top: 2px solid #888;
+  overflow-y: scroll;
+
+  .hasMessages {
+    position: fixed;
+    width: 150px;
+    left: calc(50vw - 75px);
+    right: calc(50vw - 75px);
+    margin: 0 auto;
+    border-radius: 5px 5px 0 0;
+    background: #5090E0;
+    padding: 5px;
+    padding-bottom: 15px;
+    text-align: center;
+    opacity: 0;
+    bottom: $messageFormHeight - 25px;
+
+    &.show {
+      opacity: 1;
+      bottom: $messageFormHeight;
+      transition-property: opacity bottom;
+      transition-duration: 1s;
+    }
+  }
 
   .message {
     border-bottom: 1px solid #888;
@@ -24,8 +57,6 @@ p {
     }
   }
 }
-
-$messageFormHeight: 150px;
 
 #messageFormFix {
   height: $messageFormHeight + 10px;

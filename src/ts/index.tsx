@@ -6,7 +6,7 @@ import { MessageForm } from './messageForm';
 
 ReactDOM.render(
   <div>
-    <h1>Stockings Message Board</h1>
+    <h1 id="header">Stockings Message Board</h1>
     <MessageList></MessageList>
     <MessageForm></MessageForm>
   </div>,
