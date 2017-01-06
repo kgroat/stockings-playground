@@ -3,9 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as LinkedStateMixin from 'react-addons-linked-state-mixin';
 
-LinkedStateMixin.linkState
-import { client } from './client';
-import { Message } from './message';
+import { Message, messageService } from './message';
 
 export class MessageForm extends React.Component<{}, {body: string}> {
   constructor(){
@@ -18,11 +16,8 @@ export class MessageForm extends React.Component<{}, {body: string}> {
     if(ev){
       ev.preventDefault();
     }
-    client.request<Message[]>({
-      url: '/api/message/',
-      method: 'POST',
-      body: { body: this.state.body }
-    }).subscribe();
+    if(!this.state.body) { return; }
+    messageService.post(this.state.body).subscribe();
     this.setState({ body: '' });
   }
   handleEnter(ev: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -32,9 +27,12 @@ export class MessageForm extends React.Component<{}, {body: string}> {
     }
   }
   changeHandler(name: string){
-    return (ev) => {
-      this.state[name] = ev.target.value;
-      this.setState(this.state);
+    return (ev: React.FormEvent<{ value: string }>) => {
+      var newValue = ev.currentTarget.value;
+      this.setState(state => {
+        state[name] = newValue;
+        return state;
+      });
     }
   }
   linkState = LinkedStateMixin.linkState;

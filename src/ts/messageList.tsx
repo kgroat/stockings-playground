@@ -3,20 +3,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Observable } from 'rxjs/Rx';
 
-import { client } from './client';
-import { Message } from './message';
+import { Message, messageService } from './message';
 
-interface MessageRowProps {
-  message: Message;
-}
-
-class MessageRow extends React.Component<MessageRowProps, Message> {
-  constructor(props: MessageRowProps){
+class MessageRow extends React.Component<{message: Message}, Message> {
+  constructor(props: {message: Message}){
     super(props);
     this.state = props.message;
-  }
-  addLineBreaks(body: string){
-
   }
   render(){
     var splitBody = this.state.body.split('\n');
@@ -34,19 +26,8 @@ export class MessageList extends React.Component<{}, {messages: Message[]}> {
   constructor(){
     super();
     this.state = { messages: [] };
-    this.getMessages().subscribe(messages => {
+    messageService.getAll().subscribe(messages => {
       this.setState({ messages: messages });
-    });
-  }
-  getMessages() {
-    return client.request<Message[]>({
-      url: '/api/message/',
-      method: 'GET'
-    }).map(messages => {
-      messages.forEach(msg => {
-        msg.time = new Date(msg.time)
-      });
-      return messages;
     });
   }
   render() {
