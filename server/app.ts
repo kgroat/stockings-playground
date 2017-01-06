@@ -15,7 +15,7 @@ app.use(bp.json());
 
 app.use(middleware({
   server: server,
-  privateKey: 'asdf'
+  privateKey: process.env.PRIVATE_KEY || 'this is not a secure private key'
 }));
 
 import { router } from './router';
