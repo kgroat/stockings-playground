@@ -22,6 +22,7 @@
   "author": "kgroat",
   "license": "ISC",
   "dependencies": {
+    "@types/classnames": "0.0.32",
     "@types/express": "^4.0.34",
     "@types/jquery": "^2.0.39",
     "@types/node": "^6.0.56",
@@ -30,6 +31,7 @@
     "@types/react-dom": "^0.14.20",
     "body-parser": "^1.15.2",
     "browserify": "^13.3.0",
+    "classnames": "^2.2.5",
     "express": "^4.14.0",
     "express-stockings": "^0.1.3",
     "jquery": "^3.1.1",
