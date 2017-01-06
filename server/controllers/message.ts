@@ -32,7 +32,7 @@ function generateId() {
 }
 
 messageRouter.get('/', (req: Request, res: Response) => {
-  res.subscribe(NEW_MESSAGE_MESSAGE_ID, (a,b) => { a.push(b); return a; });
+  res.subscribe(NEW_MESSAGE_MESSAGE_ID, (a,b) => { a.push(b); });
   res.json(messages);
 });
 
