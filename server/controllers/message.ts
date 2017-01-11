@@ -1,5 +1,9 @@
 import * as express from 'express';
+import { ObjectID } from 'mongodb';
 import { Request, Response } from 'express-stockings';
+import * as catcher from 'async-catcher';
+
+import { Message, MessageService } from '../services/messageService'
 
 export var messageRouter: express.Router = express.Router();
 
@@ -7,74 +11,30 @@ const MESSAGE_MESSAGE_ID = 'message';
 const NEW_MESSAGE_MESSAGE_ID = 'message:new';
 const EDIT_MESSAGE_PREFIX = 'message:';
 
-const HEX_RADIX = 16;
-const EIGHT_HEX_MAX = Math.pow(HEX_RADIX, 8);
+messageRouter.get('/', catcher(async (req: Request, res: Response) => {
+  var messages = await MessageService.getMessages();
 
-interface Message {
-  id: string;
-  body: string;
-  time: Date;
-}
-
-const messages: Message[] = [];
-
-function getEightHexDigits() {
-  var int = Math.floor(Math.random() * EIGHT_HEX_MAX);
-  return int.toString(HEX_RADIX);
-}
-
-function generateId() {
-  var output = '';
-  for(var i=0; i<4; i++){
-    output += getEightHexDigits();
-  }
-  return output;
-}
-
-messageRouter.get('/', (req: Request, res: Response) => {
   res.subscribe(NEW_MESSAGE_MESSAGE_ID, (a,b) => { a.push(b); });
   res.json(messages);
-});
+}));
 
-messageRouter.get('/:id', (req: Request, res: Response) => {
-  var id = req.param('id');
-  var message: Message = messages.find(m => m.id === id);
-  if(!message){
-    res.sendStatus(404).send(null);
+messageRouter.get('/after/:time', catcher(async (req: Request, res: Response) => {
+  var notBefore = new Date(req.params.time);
+  if(isNaN(notBefore.getTime())){
+    res.sendStatus(400).send('invalid time');
     return;
   }
-  res.subscribe(`${EDIT_MESSAGE_PREFIX}${message.id}`);
-  res.json(messages);
-});
 
-messageRouter.post('/', (req: Request, res: Response) => {
-  var message: Message = {
-    id: generateId(),
+  var messages = await MessageService.getMessages(notBefore);
+  res.json(messages);
+}));
+
+messageRouter.post('/', catcher(async (req: Request, res: Response) => {
+  var message = await MessageService.addMessage({
     body: req.body.body,
     time: new Date()
-  };
-  messages.push(message);
-  if(messages.length > 50){
-    messages.splice(0, 1);
-  }
-  
-  res.broadcast(MESSAGE_MESSAGE_ID, messages);
+  });
+
   res.broadcast(NEW_MESSAGE_MESSAGE_ID, message);
-  res.subscribe(`${EDIT_MESSAGE_PREFIX}${message.id}`);
-
   res.send(message);
-});
-
-messageRouter.put('/:id', (req: Request, res: Response) => {
-  var id = req.param('id');
-  var message: Message = messages.find(m => m.id === id);
-  if(!message){
-    res.sendStatus(404).send(null);
-    return;
-  }
-  message.body = req.body.body;
-  message.time = new Date();
-  res.broadcast(MESSAGE_MESSAGE_ID, messages);
-  res.broadcast(`${EDIT_MESSAGE_PREFIX}${message.id}`, message);
-  res.send(message);
-});
+}));

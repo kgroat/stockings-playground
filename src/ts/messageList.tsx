@@ -78,7 +78,7 @@ export class MessageList extends React.Component<{}, {messages: Message[], showH
   render() {
     return (
       <div id="messages" onScroll={this.checkScroll}>
-        {this.state.messages.map(msg => <MessageRow message={msg} key={msg.id}></MessageRow>)}
+        {this.state.messages.map(msg => <MessageRow message={msg} key={msg._id}></MessageRow>)}
         <div id="messageFormFix"></div>
         <div className={this.getHasMessagesClassNames()} onClick={this.scrollToBottom}>&darr; New Messages &darr;</div>
       </div>
